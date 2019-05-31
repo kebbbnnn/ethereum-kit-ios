@@ -33,7 +33,7 @@ target :EthereumKit do
 
   common_pods
 
-  pod 'Geth', '~> 1.8'
+  # pod 'Geth', '~> 1.8'
 end
 
 target :Erc20Kit do

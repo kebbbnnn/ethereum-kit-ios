@@ -2,6 +2,7 @@ import RxSwift
 import HSCryptoKit
 import HSHDWalletKit
 import BigInt
+import Hello
 
 public class EthereumKit {
     private let gasLimit = 21_000
@@ -34,6 +35,8 @@ public class EthereumKit {
 
         state.balance = blockchain.balance
         state.lastBlockHeight = blockchain.lastBlockHeight
+
+        print("TEST: \(HelloGreetings("Max"))")
     }
 
 }
@@ -213,10 +216,11 @@ extension EthereumKit {
 
             blockchain = SpvBlockchain.instance(storage: storage, transactionSigner: transactionSigner, transactionBuilder: transactionBuilder, rpcApiProvider: rpcApiProvider, network: network, address: address, nodeKey: nodeKey, logger: logger)
         case .geth:
-            let directoryUrl = try dataDirectoryUrl()
-            let storage: IApiStorage = ApiStorage(databaseDirectoryUrl: directoryUrl, databaseFileName: "geth-\(uniqueId)")
-            let nodeDirectory = directoryUrl.appendingPathComponent("node-\(uniqueId)", isDirectory: true)
-            blockchain = try GethBlockchain.instance(nodeDirectory: nodeDirectory, network: network, storage: storage, transactionSigner: transactionSigner, transactionBuilder: transactionBuilder, address: address, logger: logger)
+//            let directoryUrl = try dataDirectoryUrl()
+//            let storage: IApiStorage = ApiStorage(databaseDirectoryUrl: directoryUrl, databaseFileName: "geth-\(uniqueId)")
+//            let nodeDirectory = directoryUrl.appendingPathComponent("node-\(uniqueId)", isDirectory: true)
+//            blockchain = try GethBlockchain.instance(nodeDirectory: nodeDirectory, network: network, storage: storage, transactionSigner: transactionSigner, transactionBuilder: transactionBuilder, address: address, logger: logger)
+            fatalError()
         }
 
         let transactionStorage: ITransactionStorage = TransactionStorage(databaseDirectoryUrl: try dataDirectoryUrl(), databaseFileName: "transactions-\(uniqueId)")
