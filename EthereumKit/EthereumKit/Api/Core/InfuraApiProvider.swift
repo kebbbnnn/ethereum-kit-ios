@@ -43,7 +43,7 @@ extension InfuraApiProvider {
     }
 
     private func infuraVoidSingle(method: String, params: [Any]) -> Single<Void> {
-        infuraSingle(method: method, params: params) { data -> [String: Any]? in
+        return infuraSingle(method: method, params: params) { data -> [String: Any]? in
             data as? [String: Any]
         }.flatMap { data -> Single<Void> in
             guard data["result"] != nil else {
@@ -55,7 +55,7 @@ extension InfuraApiProvider {
     }
 
     private func infuraIntSingle(method: String, params: [Any]) -> Single<Int> {
-        infuraSingle(method: method, params: params) { data -> Int? in
+        return infuraSingle(method: method, params: params) { data -> Int? in
             if let map = data as? [String: Any], let result = map["result"] as? String, let int = Int(result.stripHexPrefix(), radix: 16) {
                 return int
             }
@@ -64,7 +64,7 @@ extension InfuraApiProvider {
     }
 
     private func infuraBigIntSingle(method: String, params: [Any]) -> Single<BigUInt> {
-        infuraSingle(method: method, params: params) { data -> BigUInt? in
+        return infuraSingle(method: method, params: params) { data -> BigUInt? in
             if let map = data as? [String: Any], let result = map["result"] as? String, let bigInt = BigUInt(result.stripHexPrefix(), radix: 16) {
                 return bigInt
             }
@@ -73,7 +73,7 @@ extension InfuraApiProvider {
     }
 
     private func infuraStringSingle(method: String, params: [Any]) -> Single<String> {
-        infuraSingle(method: method, params: params) { data -> String? in
+        return infuraSingle(method: method, params: params) { data -> String? in
             if let map = data as? [String: Any], let result = map["result"] as? String {
                 return result
             }
@@ -86,23 +86,23 @@ extension InfuraApiProvider {
 extension InfuraApiProvider: IRpcApiProvider {
 
     var source: String {
-        "infura.io"
+        return "infura.io"
     }
 
     func lastBlockHeightSingle() -> Single<Int> {
-        infuraIntSingle(method: "eth_blockNumber", params: [])
+        return infuraIntSingle(method: "eth_blockNumber", params: [])
     }
 
     func transactionCountSingle() -> Single<Int> {
-        infuraIntSingle(method: "eth_getTransactionCount", params: [address.toHexString(), "pending"])
+        return infuraIntSingle(method: "eth_getTransactionCount", params: [address.toHexString(), "pending"])
     }
 
     func balanceSingle() -> Single<BigUInt> {
-        infuraBigIntSingle(method: "eth_getBalance", params: [address.toHexString(), "latest"])
+        return infuraBigIntSingle(method: "eth_getBalance", params: [address.toHexString(), "latest"])
     }
 
     func sendSingle(signedTransaction: Data) -> Single<Void> {
-        infuraVoidSingle(method: "eth_sendRawTransaction", params: [signedTransaction.toHexString()])
+        return infuraVoidSingle(method: "eth_sendRawTransaction", params: [signedTransaction.toHexString()])
     }
 
     func getLogs(address: Data?, fromBlock: Int?, toBlock: Int?, topics: [Any?]) -> Single<[EthereumLog]> {
@@ -143,7 +143,7 @@ extension InfuraApiProvider: IRpcApiProvider {
     }
 
     func transactionReceiptStatusSingle(transactionHash: Data) -> Single<TransactionStatus> {
-        infuraSingle(method: "eth_getTransactionReceipt", params: [transactionHash.toHexString()]) { data -> TransactionStatus in
+        return infuraSingle(method: "eth_getTransactionReceipt", params: [transactionHash.toHexString()]) { data -> TransactionStatus in
             guard let map = data as? [String: Any],
                   let log = map["result"] as? [String: Any],
                   let statusString = log["status"] as? String,
@@ -155,7 +155,7 @@ extension InfuraApiProvider: IRpcApiProvider {
     }
 
     func transactionExistSingle(transactionHash: Data) -> Single<Bool> {
-        infuraSingle(method: "eth_getTransactionByHash", params: [transactionHash.toHexString()]) {data -> Bool in
+        return infuraSingle(method: "eth_getTransactionByHash", params: [transactionHash.toHexString()]) {data -> Bool in
             guard let map = data as? [String: Any], let _ = map["result"] as? [String: Any] else {
                 return false
             }
@@ -164,11 +164,11 @@ extension InfuraApiProvider: IRpcApiProvider {
     }
 
     func getStorageAt(contractAddress: String, position: String, blockNumber: Int?) -> Single<String> {
-        infuraStringSingle(method: "eth_getStorageAt", params: [contractAddress, position, "latest"])
+        return infuraStringSingle(method: "eth_getStorageAt", params: [contractAddress, position, "latest"])
     }
 
     func call(contractAddress: String, data: String, blockNumber: Int?) -> Single<String> {
-        infuraStringSingle(method: "eth_call", params: [["to": contractAddress, "data": data], "latest"])
+        return infuraStringSingle(method: "eth_call", params: [["to": contractAddress, "data": data], "latest"])
     }
 
     func getEstimateGas(from: String?, contractAddress: String, amount: BigUInt?, gasLimit: Int?, gasPrice: Int?, data: String?) -> Single<String> {
@@ -212,7 +212,7 @@ extension InfuraApiProvider: IRpcApiProvider {
     }
 
     func getBlock(byNumber number: Int) -> Single<Block> {
-        infuraSingle(method: "eth_getBlockByNumber", params: ["0x" + String(number, radix: 16), false]) {data -> Block? in
+        return infuraSingle(method: "eth_getBlockByNumber", params: ["0x" + String(number, radix: 16), false]) {data -> Block? in
             if let map = data as? [String: Any], let result = map["result"] {
                 return Block(json: result)
             }

@@ -46,13 +46,13 @@ class TransactionStorage {
 extension TransactionStorage: ITransactionStorage {
 
     var lastTransactionBlockHeight: Int? {
-        try? dbPool.read { db in
+        return try? dbPool.read { db in
             try Transaction.order(Transaction.Columns.blockNumber.desc).fetchOne(db)?.blockNumber
         }
     }
 
     func transactionsSingle(fromHash: Data?, limit: Int?, contractAddress: Data?) -> Single<[Transaction]> {
-        Single.create { [weak self] observer in
+        return Single.create { [weak self] observer in
             try? self?.dbPool.read { db in
                 var request = Transaction.all()
 

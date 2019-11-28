@@ -43,35 +43,35 @@ public class Kit {
 extension Kit {
 
     public var lastBlockHeight: Int? {
-        state.lastBlockHeight
+        return state.lastBlockHeight
     }
 
     public var balance: String? {
-        state.balance?.description
+        return state.balance?.description
     }
 
     public var syncState: SyncState {
-        blockchain.syncState
+        return blockchain.syncState
     }
 
     public var receiveAddress: String {
-        address.toEIP55Address()
+        return address.toEIP55Address()
     }
 
     public var lastBlockHeightObservable: Observable<Int> {
-        lastBlockHeightSubject.asObservable()
+        return lastBlockHeightSubject.asObservable()
     }
 
     public var syncStateObservable: Observable<SyncState> {
-        syncStateSubject.asObservable()
+        return syncStateSubject.asObservable()
     }
 
     public var balanceObservable: Observable<String> {
-        balanceSubject.asObservable()
+        return balanceSubject.asObservable()
     }
 
     public var transactionsObservable: Observable<[TransactionInfo]> {
-        transactionsSubject.asObservable()
+        return transactionsSubject.asObservable()
     }
 
     public func start() {
@@ -93,11 +93,11 @@ extension Kit {
     }
 
     public func fee(gasPrice: Int) -> Decimal {
-        Decimal(gasPrice) * Decimal(gasLimit)
+        return Decimal(gasPrice) * Decimal(gasLimit)
     }
 
     public func transactionsSingle(fromHash: String? = nil, limit: Int? = nil) -> Single<[TransactionInfo]> {
-        transactionManager.transactionsSingle(fromHash: fromHash.flatMap { Data(hex: $0) }, limit: limit)
+        return transactionManager.transactionsSingle(fromHash: fromHash.flatMap { Data(hex: $0) }, limit: limit)
                 .map { $0.map { TransactionInfo(transaction: $0) } }
     }
 
@@ -132,11 +132,11 @@ extension Kit {
     }
 
     public func getLogsSingle(address: Data?, topics: [Any?], fromBlock: Int, toBlock: Int, pullTimestamps: Bool) -> Single<[EthereumLog]> {
-        blockchain.getLogsSingle(address: address, topics: topics, fromBlock: fromBlock, toBlock: toBlock, pullTimestamps: pullTimestamps)
+        return blockchain.getLogsSingle(address: address, topics: topics, fromBlock: fromBlock, toBlock: toBlock, pullTimestamps: pullTimestamps)
     }
 
     public func transactionStatus(transactionHash: Data) -> Single<TransactionStatus> {
-        blockchain.transactionReceiptStatusSingle(transactionHash: transactionHash).flatMap { [unowned self] transactionStatus -> Single<TransactionStatus> in
+        return blockchain.transactionReceiptStatusSingle(transactionHash: transactionHash).flatMap { [unowned self] transactionStatus -> Single<TransactionStatus> in
             switch transactionStatus {
             case .success, .failed:
                 return Single.just(transactionStatus)
@@ -149,19 +149,19 @@ extension Kit {
     }
 
     public func getStorageAt(contractAddress: Data, positionData: Data, blockHeight: Int) -> Single<Data> {
-        blockchain.getStorageAt(contractAddress: contractAddress, positionData: positionData, blockHeight: blockHeight)
+        return blockchain.getStorageAt(contractAddress: contractAddress, positionData: positionData, blockHeight: blockHeight)
     }
 
     public func call(contractAddress: Data, data: Data, blockHeight: Int? = nil) -> Single<Data> {
-        blockchain.call(contractAddress: contractAddress, data: data, blockHeight: blockHeight)
+        return blockchain.call(contractAddress: contractAddress, data: data, blockHeight: blockHeight)
     }
 
     public func estimateGas(contractAddress: String, amount: BigUInt?, gasLimit: Int?, gasPrice: Int?, data: Data?) -> Single<Int> {
-        blockchain.estimateGas(from: receiveAddress, contractAddress: contractAddress, amount: amount, gasLimit: gasLimit, gasPrice: gasPrice, data: data)
+        return blockchain.estimateGas(from: receiveAddress, contractAddress: contractAddress, amount: amount, gasLimit: gasLimit, gasPrice: gasPrice, data: data)
     }
 
     public func statusInfo() -> [(String, Any)] {
-        [
+        return [
             ("Last Block Height", "\(state.lastBlockHeight.map { "\($0)" } ?? "N/A")"),
             ("Sync State", blockchain.syncState.description),
             ("Blockchain Source", blockchain.source),

@@ -128,7 +128,7 @@ class SendController: UIViewController {
     }
 
     private var currentAdapter: IAdapter {
-        adapters[segmentedControl.selectedSegmentIndex]
+        return adapters[segmentedControl.selectedSegmentIndex]
     }
 
     @objc func textFieldDidChange() {

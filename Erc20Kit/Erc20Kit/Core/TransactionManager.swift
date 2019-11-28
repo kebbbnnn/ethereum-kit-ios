@@ -63,7 +63,7 @@ class TransactionManager {
     }
 
     private func updateFailStatus(pendingTransactions: [Transaction], statuses: [(Data, TransactionStatus)]) -> [Transaction] {
-        statuses.compactMap { (hash, status) -> Transaction? in
+        return statuses.compactMap { (hash, status) -> Transaction? in
             if status == .failed || status == .notFound,
                let txIndex = pendingTransactions.firstIndex(where: { $0.transactionHash == hash }) {
                 pendingTransactions[txIndex].isError = true
@@ -78,15 +78,15 @@ class TransactionManager {
 extension TransactionManager: ITransactionManager {
 
     var lastTransactionBlockHeight: Int? {
-        storage.lastTransactionBlockHeight
+        return storage.lastTransactionBlockHeight
     }
 
     func transactionsSingle(from: (hash: Data, interTransactionIndex: Int)?, limit: Int?) -> Single<[Transaction]> {
-        storage.transactionsSingle(from: from, limit: limit)
+        return storage.transactionsSingle(from: from, limit: limit)
     }
 
     func transactionContractData(to: Data, value: BigUInt) -> Data {
-        transactionBuilder.transferTransactionInput(to: to, value: value)
+        return transactionBuilder.transferTransactionInput(to: to, value: value)
     }
 
     func sendSingle(to: Data, value: BigUInt, gasPrice: Int, gasLimit: Int) -> Single<Transaction> {

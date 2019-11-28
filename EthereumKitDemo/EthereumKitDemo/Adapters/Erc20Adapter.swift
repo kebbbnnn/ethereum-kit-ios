@@ -66,7 +66,7 @@ class Erc20Adapter {
 extension Erc20Adapter: IAdapter {
 
     var lastBlockHeight: Int? {
-        ethereumKit.lastBlockHeight
+        return ethereumKit.lastBlockHeight
     }
 
     var syncState: EthereumKit.SyncState {
@@ -86,23 +86,23 @@ extension Erc20Adapter: IAdapter {
     }
 
     var receiveAddress: String {
-        ethereumKit.receiveAddress
+        return ethereumKit.receiveAddress
     }
 
     var lastBlockHeightObservable: Observable<Void> {
-        ethereumKit.lastBlockHeightObservable.map { _ in () }
+        return ethereumKit.lastBlockHeightObservable.map { _ in () }
     }
 
     var syncStateObservable: Observable<Void> {
-        erc20Kit.syncStateObservable.map { _ in () }
+        return erc20Kit.syncStateObservable.map { _ in () }
     }
 
     var balanceObservable: Observable<Void> {
-        erc20Kit.balanceObservable.map { _ in () }
+        return erc20Kit.balanceObservable.map { _ in () }
     }
 
     var transactionsObservable: Observable<Void> {
-        erc20Kit.transactionsObservable.map { _ in () }
+        return erc20Kit.transactionsObservable.map { _ in () }
     }
 
     func validate(address: String) throws {
@@ -110,11 +110,11 @@ extension Erc20Adapter: IAdapter {
     }
 
     func sendSingle(to: String, amount: Decimal, gasLimit: Int) -> Single<Void> {
-        try! erc20Kit.sendSingle(to: to, value: amount.roundedString(decimal: decimal), gasPrice: 5_000_000_000, gasLimit: gasLimit).map { _ in ()}
+        return try! erc20Kit.sendSingle(to: to, value: amount.roundedString(decimal: decimal), gasPrice: 5_000_000_000, gasLimit: gasLimit).map { _ in ()}
     }
 
     func transactionsSingle(from: (hash: String, interTransactionIndex: Int)?, limit: Int?) -> Single<[TransactionRecord]> {
-        try! erc20Kit.transactionsSingle(from: from, limit: limit)
+        return try! erc20Kit.transactionsSingle(from: from, limit: limit)
                 .map { [weak self] in
                     $0.compactMap {
                         self?.transactionRecord(fromTransaction: $0)
@@ -123,7 +123,7 @@ extension Erc20Adapter: IAdapter {
     }
 
     func estimatedGasLimit(to address: String, value: Decimal) -> Single<Int> {
-        erc20Kit.estimateGas(to: address, contractAddress: contractAddress, value: value.roundedString(decimal: decimal), gasPrice: 5_000_000_000)
+        return erc20Kit.estimateGas(to: address, contractAddress: contractAddress, value: value.roundedString(decimal: decimal), gasPrice: 5_000_000_000)
     }
 
 }

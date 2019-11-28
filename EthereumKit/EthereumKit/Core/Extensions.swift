@@ -25,23 +25,23 @@ public extension Data {
     }
 
     func toHexString() -> String {
-        "0x" + self.toRawHexString()
+        return "0x" + self.toRawHexString()
     }
 
     func toRawHexString() -> String {
-        reduce("") { $0 + String(format: "%02x", $1) }
+        return reduce("") { $0 + String(format: "%02x", $1) }
     }
 
     func toEIP55Address() -> String {
-        EIP55.format(address: self.toRawHexString())
+        return EIP55.format(address: self.toRawHexString())
     }
 
     var bytes: Array<UInt8> {
-        Array(self)
+        return Array(self)
     }
 
     func to<T>(type: T.Type) -> T {
-        self.withUnsafeBytes { $0.load(as: T.self) }
+        return self.withUnsafeBytes { $0.load(as: T.self) }
     }
 
 }
@@ -49,7 +49,7 @@ public extension Data {
 extension Int {
 
     var flowControlLog: String {
-        "\(Double(self) / 1_000_000)"
+        return "\(Double(self) / 1_000_000)"
     }
 
 }
@@ -57,7 +57,7 @@ extension Int {
 extension String {
 
     func removeLeadingZeros() -> String {
-        self.replacingOccurrences(of: "^0+", with: "", options: .regularExpression)
+        return self.replacingOccurrences(of: "^0+", with: "", options: .regularExpression)
     }
 
     func stripHexPrefix() -> String {

@@ -54,11 +54,11 @@ public class Kit {
 extension Kit {
 
     public var syncState: SyncState {
-        state.syncState
+        return state.syncState
     }
 
     public var balance: String? {
-        state.balance?.description
+        return state.balance?.description
     }
 
     public func sendSingle(to: String, value: String, gasPrice: Int, gasLimit: Int) throws -> Single<TransactionInfo> {
@@ -89,15 +89,15 @@ extension Kit {
     }
 
     public var syncStateObservable: Observable<SyncState> {
-        state.syncStateSubject.asObservable()
+        return state.syncStateSubject.asObservable()
     }
 
     public var balanceObservable: Observable<String> {
-        state.balanceSubject.asObservable()
+        return state.balanceSubject.asObservable()
     }
 
     public var transactionsObservable: Observable<[TransactionInfo]> {
-        state.transactionsSubject.asObservable()
+        return state.transactionsSubject.asObservable()
     }
 
     public func estimateGas(to: String, contractAddress: String, value: String, gasPrice: Int?) -> Single<Int> {

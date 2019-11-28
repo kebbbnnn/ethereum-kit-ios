@@ -33,7 +33,7 @@ class SpvBlockchain {
 extension SpvBlockchain: IBlockchain {
 
     var source: String {
-        "SPV"
+        return "SPV"
     }
 
     func start() {
@@ -53,15 +53,15 @@ extension SpvBlockchain: IBlockchain {
     }
 
     var syncState: SyncState {
-        .notSynced
+        return .notSynced
     }
 
     var lastBlockHeight: Int? {
-        storage.lastBlockHeader?.height
+        return storage.lastBlockHeader?.height
     }
 
     var balance: BigUInt? {
-        storage.accountState?.balance
+        return storage.accountState?.balance
     }
 
     func sendSingle(rawTransaction: RawTransaction) -> Single<Transaction> {
@@ -79,23 +79,23 @@ extension SpvBlockchain: IBlockchain {
     }
 
     func getLogsSingle(address: Data?, topics: [Any?], fromBlock: Int, toBlock: Int, pullTimestamps: Bool) -> Single<[EthereumLog]> {
-        Single.just([])
+        return Single.just([])
     }
 
     func transactionReceiptStatusSingle(transactionHash: Data) -> Single<TransactionStatus> {
-        rpcApiProvider.transactionReceiptStatusSingle(transactionHash: transactionHash)
+        return rpcApiProvider.transactionReceiptStatusSingle(transactionHash: transactionHash)
     }
 
     func transactionExistSingle(transactionHash: Data) -> Single<Bool> {
-        rpcApiProvider.transactionExistSingle(transactionHash: transactionHash)
+        return rpcApiProvider.transactionExistSingle(transactionHash: transactionHash)
     }
 
     func getStorageAt(contractAddress: Data, positionData: Data, blockHeight: Int) -> Single<Data> {
-        Single.just(Data())
+        return Single.just(Data())
     }
 
     func call(contractAddress: Data, data: Data, blockHeight: Int?) -> Single<Data> {
-        rpcApiProvider.call(contractAddress: contractAddress.toHexString(), data: data.toHexString(), blockNumber: blockHeight)
+        return rpcApiProvider.call(contractAddress: contractAddress.toHexString(), data: data.toHexString(), blockNumber: blockHeight)
                 .flatMap { value -> Single<Data> in
                     guard let data = Data(hex: value) else {
                         return Single.error(ApiError.invalidData)
@@ -106,7 +106,7 @@ extension SpvBlockchain: IBlockchain {
     }
 
     func estimateGas(from: String?, contractAddress: String, amount: BigUInt?, gasLimit: Int?, gasPrice: Int?, data: Data?) -> Single<Int> {
-        rpcApiProvider.getEstimateGas(from: from, contractAddress: contractAddress, amount: amount, gasLimit: gasLimit, gasPrice: gasPrice, data: data?.toHexString())
+        return rpcApiProvider.getEstimateGas(from: from, contractAddress: contractAddress, amount: amount, gasLimit: gasLimit, gasPrice: gasPrice, data: data?.toHexString())
                 .flatMap { (value: String) -> Single<Int> in
                     guard let data = Int(value.stripHexPrefix(), radix: 16) else {
                         return Single.error(ApiError.invalidData)

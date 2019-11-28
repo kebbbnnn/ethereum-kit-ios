@@ -47,19 +47,19 @@ class EthereumAdapter {
 extension EthereumAdapter: IAdapter {
 
     var name: String {
-        "Ethereum"
+        return "Ethereum"
     }
 
     var coin: String {
-        "ETH"
+        return "ETH"
     }
 
     var lastBlockHeight: Int? {
-        ethereumKit.lastBlockHeight
+        return ethereumKit.lastBlockHeight
     }
 
     var syncState: SyncState {
-        ethereumKit.syncState
+        return ethereumKit.syncState
     }
 
     var balance: Decimal {
@@ -71,23 +71,23 @@ extension EthereumAdapter: IAdapter {
     }
 
     var receiveAddress: String {
-        ethereumKit.receiveAddress
+        return ethereumKit.receiveAddress
     }
 
     var lastBlockHeightObservable: Observable<Void> {
-        ethereumKit.lastBlockHeightObservable.map { _ in () }
+        return ethereumKit.lastBlockHeightObservable.map { _ in () }
     }
 
     var syncStateObservable: Observable<Void> {
-        ethereumKit.syncStateObservable.map { _ in () }
+        return ethereumKit.syncStateObservable.map { _ in () }
     }
 
     var balanceObservable: Observable<Void> {
-        ethereumKit.balanceObservable.map { _ in () }
+        return ethereumKit.balanceObservable.map { _ in () }
     }
 
     var transactionsObservable: Observable<Void> {
-        ethereumKit.transactionsObservable.map { _ in () }
+        return ethereumKit.transactionsObservable.map { _ in () }
     }
 
     func validate(address: String) throws {
@@ -95,11 +95,11 @@ extension EthereumAdapter: IAdapter {
     }
 
     func sendSingle(to: String, amount: Decimal, gasLimit: Int) -> Single<Void> {
-        ethereumKit.sendSingle(to: to, value: amount.roundedString(decimal: decimal), gasPrice: 5_000_000_000, gasLimit: gasLimit).map { _ in ()}
+        return ethereumKit.sendSingle(to: to, value: amount.roundedString(decimal: decimal), gasPrice: 5_000_000_000, gasLimit: gasLimit).map { _ in ()}
     }
 
     func transactionsSingle(from: (hash: String, interTransactionIndex: Int)?, limit: Int?) -> Single<[TransactionRecord]> {
-        ethereumKit.transactionsSingle(fromHash: from?.hash, limit: limit)
+        return ethereumKit.transactionsSingle(fromHash: from?.hash, limit: limit)
                 .map { [weak self] in
                     $0.compactMap {
                         self?.transactionRecord(fromTransaction: $0)
@@ -108,7 +108,7 @@ extension EthereumAdapter: IAdapter {
     }
 
     func estimatedGasLimit(to address: String, value: Decimal) -> Single<Int> {
-        Single.just(ethereumKit.gasLimit)
+        return Single.just(ethereumKit.gasLimit)
     }
 
 }

@@ -37,7 +37,7 @@ extension EtherscanApiProvider {
     }
 
     private func etherscanTransactionsSingle(params: [String: Any]) -> Single<[[String: String]]> {
-        etherscanSingle(params: params) { data -> [[String: String]]? in
+        return etherscanSingle(params: params) { data -> [[String: String]]? in
             if let map = data as? [String: Any], let result = map["result"] as? [[String: String]] {
                 return result
             }
@@ -50,7 +50,7 @@ extension EtherscanApiProvider {
 extension EtherscanApiProvider: ITransactionsProvider {
 
     var source: String {
-        "etherscan.io"
+        return "etherscan.io"
     }
 
     func transactionsSingle(startBlock: Int) -> Single<[Transaction]> {

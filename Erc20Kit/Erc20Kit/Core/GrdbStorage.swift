@@ -77,19 +77,19 @@ extension GrdbStorage: ITokenBalanceStorage {
 extension GrdbStorage: ITransactionStorage {
 
     var lastTransactionBlockHeight: Int? {
-        try! dbPool.read { db in
+        return try! dbPool.read { db in
             try Transaction.order(Transaction.Columns.blockNumber.desc).fetchOne(db)?.blockNumber
         }
     }
 
     var pendingTransactions: [Transaction] {
-        try! dbPool.read { db in
+        return try! dbPool.read { db in
             try Transaction.filter(Transaction.Columns.logIndex == nil && Transaction.Columns.isError == false).fetchAll(db)
         }
     }
 
     func transactionsSingle(from: (hash: Data, interTransactionIndex: Int)?, limit: Int?) -> Single<[Transaction]> {
-        Single.create { [weak self] observer in
+        return Single.create { [weak self] observer in
             try! self?.dbPool.read { db in
                 var request = Transaction.order(Transaction.Columns.timestamp.desc, Transaction.Columns.transactionIndex.desc, Transaction.Columns.interTransactionIndex.desc)
 

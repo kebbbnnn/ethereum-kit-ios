@@ -26,7 +26,7 @@ class TransactionManager {
 extension TransactionManager: ITransactionManager {
 
     var source: String {
-        transactionsProvider.source
+        return transactionsProvider.source
     }
 
     func refresh() {
@@ -41,7 +41,7 @@ extension TransactionManager: ITransactionManager {
     }
 
     func transactionsSingle(fromHash: Data?, limit: Int?) -> Single<[Transaction]> {
-        storage.transactionsSingle(fromHash: fromHash, limit: limit, contractAddress: nil)
+        return storage.transactionsSingle(fromHash: fromHash, limit: limit, contractAddress: nil)
     }
 
     func handle(sentTransaction: Transaction) {
